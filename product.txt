@@ -1,0 +1,1 @@
+[{"title":"PS5","price":12345,"thumbnail":"Some","id":1},{"title":"jojo","price":2345,"thumbnail":"url","id":2}]
