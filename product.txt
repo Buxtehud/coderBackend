@@ -1,0 +1,1 @@
+[{"title":"Sartén","price":685,"thumbnail":"urlSarten","id":1},{"title":"Jabón","price":185,"thumbnail":"urlJabón","id":2},{"title":"Escoba","price":485,"thumbnail":"urlEscoba","id":3},{"title":"Vaso","price":465,"thumbnail":"urlVaso","id":4}]
