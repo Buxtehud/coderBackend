@@ -59,11 +59,28 @@ class Contenedor{
             return "";
         }
     }
+
+    async modify(id, obj){
+        this.readData().then(fileObj => {
+            fileObj = fileObj.map(element => {
+                if(element.id === id){
+                    let keys = Object.keys(obj);
+                    keys.forEach(key => {
+                        element[key] = obj[key]
+                    })
+                }
+                return element;
+            });
+            fs.promises.writeFile(this.fileName, JSON.stringify(fileObj));
+            return fileObj
+        })
+    }
 }
 
 module.exports = Contenedor;
 
 // const cont = new Contenedor('product.txt');
+// cont.modify(3, {price:629}).then(ans => console.log(`Element modified');
 // cont.save({title: 'Vaso', price:465, thumbnail: 'urlVaso'}).then((answ) => console.log(`Element ${answ} added successfully`));
 // cont.getById(2).then(ans => console.log(ans))
 // cont.getById(7).then(ans => console.log(ans))

@@ -21,6 +21,12 @@ router.post('/', (req, res) => {
     productos.save(product).then(ans => res.json({ans})).catch(err => res.json({error:err}));
 });
 
+router.put('/:id', (req, res) =>{
+    const product = req.body;
+    const id = req.params.id;
+    productos.modify(parseInt(id), product).then((ans) => console.log(ans)).catch(err => res.json({error:err}));
+})
+
 router.delete('/:id', (req, res) => productos.deleteById(parseInt(req.params.id)).then(res.json({message:'product deleted'})));
 
 server.on('error', (error) => console.log('Error en el servidor: '+error));
