@@ -1,10 +1,8 @@
-const Products = require('./manejoArchivos');
+const Products = require('../manejoArchivos');
 const productos = new Products();
 
 const express = require('express');
 const { Router } = express;
-
-const handlebars = require('express-handlebars');
 
 const app = express();
 const router = Router();
@@ -12,31 +10,36 @@ const PORT = 8080;
 
 const server = app.listen(PORT, () => {console.log(`Escuchando Server en ${PORT}`)});
 
-app.engine(
-    'hbs',
-    handlebars.engine({
-    extname: '.hbs',
-    defaultLayout: 'index.hbs',
-    layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials/'
-    })
-);
-
-app.set('view engine', 'hbs');
+//Configuración de Pug------------------------------------------------------------------------------
+app.set('view engine', 'pug');
 app.set('views', './views');
-app.use(express.static('public'));
+//--------------------------------------------------------------------------------------------------
 
-app.use('/static', express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
-router.get('/',(req, res) => {
+//Rutas Plantillas----------------------------------------------------------------------------------
+app.get('/productos', (req, res) => {
     const products = productos.getAll();
     res.render('main', {
         product: products,
         prodAmount: products.length
     });
+})
+
+app.post('/productos', (req, res) => {
+    const product = req.body;
+    const id = productos.save(product);
+    res.json(productos.getById(id));
+    res.redirect('/')
+});
+
+//API REST------------------------------------------------------------------------------------------
+router.get('/',(req, res) => {
+    const products = productos.getAll();
+    res.json(products);
 });
 router.get('/:id',(req, res) => {
     const product = productos.getById(parseInt(req.params.id));

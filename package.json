@@ -5,12 +5,13 @@
   "main": "AndresAndrade.js",
   "dependencies": {
     "express": "^4.17.3",
-    "express-handlebars": "^6.0.3"
+    "express-handlebars": "^6.0.3",
+    "pug": "^3.0.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node handlebars/server.js"
   },
   "repository": {
     "type": "git",
