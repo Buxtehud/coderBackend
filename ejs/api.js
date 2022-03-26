@@ -11,8 +11,8 @@ const PORT = 8080;
 const server = app.listen(PORT, () => {console.log(`Escuchando Server en ${PORT}`)});
 
 //Configuración de Pug------------------------------------------------------------------------------
-app.set('view engine', 'pug');
-app.set('views', './views');
+app.set('view engine', 'ejs');
+
 //--------------------------------------------------------------------------------------------------
 
 app.use(express.static(__dirname + '/public'));
