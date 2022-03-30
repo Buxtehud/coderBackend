@@ -2,6 +2,7 @@ const socket = io.connect();
 
 const addProduct = document.getElementById('form-product');
 addProduct.addEventListener('submit', e => {
+    e.preventDefault();
     const product = {
         title: addProduct[0].value,
         price: addProduct[1].value,
@@ -10,11 +11,9 @@ addProduct.addEventListener('submit', e => {
     socket.emit('update', product);
     addProduct.reset();
     console.log(product)
-    return false
 });
 
 socket.on('productos', productos => {
-    console.log(productos)
     addTable(productos).then(html => {
        document.getElementById('products').innerHTML = html;
     });
