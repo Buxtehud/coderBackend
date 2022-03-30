@@ -4,11 +4,19 @@ const productos = new Products();
 const express = require('express');
 const { Router } = express;
 
+const {Server: HttpServer} = require('http')
+const {Server: IOServer} = require('socket.io');
+
 const app = express();
+
 const router = Router();
 const PORT = 8080;
+/*const server = app.listen(PORT, () => {console.log(`Escuchando Server en ${PORT}`)});*/
 
-const server = app.listen(PORT, () => {console.log(`Escuchando Server en ${PORT}`)});
+const httpServer = new HttpServer(app)
+const io = new IOServer(httpServer);
+
+httpServer.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`))
 
 //Configuración de Handlebars-----------------------------------------------------------------------
 
@@ -29,7 +37,6 @@ app.set('views', './views');
 //--------------------------------------------------------------------------------------------------
 
 app.use(express.static(__dirname + '/public'));
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
@@ -48,6 +55,18 @@ app.post('/productos', (req, res) => {
     res.json(productos.getById(id));
     res.redirect('/')
 });
+
+//Sockets---------------------------------------------------------------------------------------------
+io.on('connection', async socket => {
+    console.log('Nuevo cliente conectado.');
+
+    socket.emit('productos', productos.getAll());
+
+    socket.on('update', producto => {
+        productos.save(producto);
+        io.sockets.emit('productos', productos.getAll());
+    });
+})
 
 
 //API REST------------------------------------------------------------------------------------------
@@ -78,8 +97,6 @@ router.delete('/:id', (req, res) => {
     productos.deleteById(parseInt(req.params.id));
     res.json({message: 'Product deleted'});
 });
-
-server.on('error', (error) => console.log('Error en el servidor: '+error));
 
 app.use('/api/productos',router)
 
