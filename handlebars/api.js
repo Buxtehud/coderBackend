@@ -1,6 +1,9 @@
 const Products = require('../manejoArchivos');
 const productos = new Products();
 
+const Local = require('../archivosLocales')
+const local = new Local('messages.txt');
+
 const express = require('express');
 const { Router } = express;
 
@@ -66,7 +69,17 @@ io.on('connection', async socket => {
         productos.save(producto);
         io.sockets.emit('productos', productos.getAll());
     });
+
+    socket.emit('messages', await local.getAll());
+
+    socket.on('newMessage', async message => {
+        message.date = new Date().toLocaleString();
+        await local.save(message);
+        io.sockets.emit('messages', await local.getAll());
+    });
 })
+
+
 
 
 //API REST------------------------------------------------------------------------------------------

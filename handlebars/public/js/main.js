@@ -24,7 +24,47 @@ function addTable(products) {
         .then(ans => ans.text())
         .then(template => {
             const temp = Handlebars.compile(template);
-            const html = temp({products});
-            return html;
+            return temp({products});
         });
 }
+
+const email = document.getElementById('email');
+const inputMessage = document.getElementById('inputMessage');
+const button = document.getElementById('sendButton');
+
+const formSendMessage = document.getElementById('form-message');
+formSendMessage.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = {mail: email.value, text: inputMessage.value}
+    socket.emit('newMessage', message);
+    formSendMessage.reset();
+    inputMessage.focus();
+});
+
+socket.on('messages', messages => {
+    document.getElementById('messages').innerHTML = messagesHTML(messages);
+});
+
+function messagesHTML(messages) {
+    console.log(messages)
+    return messages.map( message => {
+        return(`
+        <div>
+            <b style="color:blue;">${message.mail}</b>
+            [<span style="color:brown;">${message.date}</span>] :
+                <i style="color:green;">${message.text}</i>
+        </div>
+        `)
+    }).join(' ');
+}
+
+email.addEventListener('input', () => {
+    const emailValid = email.value.length;
+    inputMessage.disabled =!emailValid;
+    button.disabled = !emailValid;
+})
+
+inputMessage.addEventListener('input', () => {
+    const textValid = inputMessage.value.length;
+    button.disabled = !textValid;
+})
