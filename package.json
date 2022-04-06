@@ -2,23 +2,19 @@
   "name": "coderhouse",
   "version": "1.0.0",
   "description": "",
-  "main": "AndresAndrade.js",
+  "main": "index.js",
   "dependencies": {
-    "ejs": "^3.1.6",
     "express": "^4.17.3",
-    "express-handlebars": "^6.0.3",
-    "pug": "^3.0.2"
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node handlebars/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Buxtehud/coderBackend.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
