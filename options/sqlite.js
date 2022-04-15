@@ -3,6 +3,7 @@ const optionsLite = require('knex')({
   connection: {
     filename: './DB/ecommerce.sqlite3'
   },
+  useNullAsDefault: true
 });
 
 module.exports = {

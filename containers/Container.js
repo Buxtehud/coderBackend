@@ -5,11 +5,11 @@ class Product{
     }
 
     getAll(){
-        return this.knex.select().from('products');
+        return this.knex.from('products').select('*');
     }
 
     getById(id){
-        return this.knex.select().from('products').where('id', id);
+        return this.knex.from('products').select('*').where('id', id);
     }
 
     save(product){
@@ -17,7 +17,7 @@ class Product{
     }
 
     update(id, product){
-        return this.knex('products').where('id', id).update(product);
+        return this.knex.from('products').where('id', id).update(product);
     }
 
     delete(id){
