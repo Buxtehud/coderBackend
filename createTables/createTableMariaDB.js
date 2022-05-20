@@ -1,4 +1,4 @@
-const { optionsMariaDB } = require('./options/mariaDB');
+const { optionsMariaDB } = require('../options/mariaDB');
 const knex = require('knex')(optionsMariaDB);
 
 (async () => {

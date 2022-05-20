@@ -1,11 +1,11 @@
 //Llamado a bases de datos e instanciando Contenedores----------------------------------------------
 
-const productsOption = require('../options/mariaDB');
-const messagesOption = require('../options/sqlite');
+const { productsOption } = require('./options/mariaDB');
+const { messagesOption } = require('./options/sqlite');
 
-const Container = require('../containers/Container');
-const productos = new Container(productsOption);
-const mensajes = new Container(messagesOption);
+const Container = require('./containers/Container');
+const productos = new Container(productsOption, 'productos');
+const mensajes = new Container(messagesOption, 'mensajes');
 
 //--------------------------------------------------------------------------------------------------
 
@@ -69,9 +69,9 @@ io.on('connection', async socket => {
 
     socket.emit('productos', productos.getAll());
 
-    socket.on('update', producto => {
-        productos.save(producto);
-        io.sockets.emit('productos', productos.getAll());
+    socket.on('update', async (producto) => {
+        await productos.save(producto);
+        io.sockets.emit('productos', await productos.getAll());
     });
 
     socket.emit('messages', await mensajes.getAll());

@@ -1,4 +1,4 @@
-const optionsMariaDB = require('knex')({
+const optionsMariaDB = {
     client: 'mysql',
     connection: {
         host: '127.0.0.1',
@@ -6,7 +6,7 @@ const optionsMariaDB = require('knex')({
         password: '',
         database: 'ecommerce'
     }
-})
+}
 
 module.exports = {
     optionsMariaDB
