@@ -22,8 +22,12 @@ class ContainerSQL {
         return this.knex.from(this.table).where('id', id).update(product);
     }
 
-    delete(id){
+    deleteById(id){
         return this.knex(this.table).where('id', id).del();
+    }
+
+    getAmount(){
+        return this.knex(this.table).count('id').first();
     }
 
 }

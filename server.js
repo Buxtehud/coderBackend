@@ -116,8 +116,8 @@ router.delete('/:id', (req, res) => {
 app.use('/api/productos',router)
 
 app.get('/productoRandom',(req,res) => {
-    productos.getAmmount().then(ammount =>{
-        const id = Math.floor(Math.random() * (ammount))+1;
+    productos.getAmount().then(amount =>{
+        const id = Math.floor(Math.random() * (amount))+1;
         productos.getById(id).then(result => {
             res.json(result);
         })
