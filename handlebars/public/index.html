@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
 </head>
 <body>
 
@@ -25,8 +26,14 @@
 
     <div class="container">
         <h1>Centro de Mensajes</h1>
+        <p id="compression"></p>
         <br>
         <input type="text" name="email" id="email" placeholder="Ingresa tu email">
+        <input type="text" name="name" id="name" placeholder="Ingresa tu nombre">
+        <input type="text" name="apellido" id="apellido" placeholder="Ingresa tu apellido">
+        <input type="number" name="edad" id="edad" placeholder="Ingresa tu edad">
+        <input type="text" name="alias" id="alias" placeholder="Ingresa tu alias">
+        <input type="text" name="avatar" id="avatar" placeholder="avatar">
         <br>
         <div id="messages"></div>
         <form id="form-message">

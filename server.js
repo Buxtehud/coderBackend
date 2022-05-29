@@ -1,9 +1,12 @@
 //Llamado a bases de datos e instanciando Contenedores----------------------------------------------
 import config from './src/config'
+import {createFakeProduct, createNFakeProducts} from "./src/mocks/products";
+import ContainerFilesystem from "./src/containers/containerFilesystem";
+import { normalize, schema } from "normalizr";
 
 const ContainerSQL = require('./src/containers/containerSQL');
 const productos = new ContainerSQL(config.mariadb, 'productos');
-const mensajes = new ContainerSQL(config.sqlite3, 'mensajes');
+const mensajes = new ContainerFilesystem(`${config.fileSystem.path}/messages.json`);
 
 //--------------------------------------------------------------------------------------------------
 
@@ -16,6 +19,7 @@ const {Server: IOServer} = require('socket.io');
 const app = express();
 
 const router = Router();
+const test = Router();
 const PORT = 8080;
 
 const httpServer = new HttpServer(app)
@@ -72,12 +76,20 @@ io.on('connection', async socket => {
         io.sockets.emit('productos', await productos.getAll());
     });
 
-    socket.emit('messages', await mensajes.getAll());
+//Normalizar----------------------------------------------------------------------------------------
+
+    const schemaAuthor = new schema.Entity('author', {}, { idAttribute: 'email' });
+    const schemaMessage = new schema.Entity('message', { author: schemaAuthor }, { idAttribute: 'id' });
+    const schemaMessages = new schema.Entity('messages', { messages: [schemaMessage] }, { idAttribute: 'id' });
+
+    const normalizeMessage = (messageId) => normalize({ id: 'messages', messages: messageId }, schemaMessages);
+
+    socket.emit('messages', normalizeMessage(mensajes.getAll()));
 
     socket.on('newMessage', async message => {
         message.date = new Date().toLocaleString();
         await mensajes.save(message);
-        io.sockets.emit('messages', await mensajes.getAll());
+        io.sockets.emit('messages', normalizeMessage(mensajes.getAll()));
     });
 })
 
@@ -123,3 +135,15 @@ app.get('/productoRandom',(req,res) => {
         })
     })
 });
+
+//MOCKS ----------------------------------------------------------------------------------------------------------------
+
+test.get('/', (req, res) => {
+    const products = createNFakeProducts(5);
+    res.render('main', {
+        product: products,
+        prodAmount: products.length
+    });
+})
+
+app.use('/api/productos-test', test)

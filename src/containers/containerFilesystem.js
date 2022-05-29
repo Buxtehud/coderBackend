@@ -21,7 +21,7 @@ class ContainerFilesystem {
         return obj.find(o => o.id === id)
     }
 
-    async guardar(obj) {
+    async save(obj) {
         const elements = await this.getAll()
 
         let newId
