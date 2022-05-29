@@ -1,11 +1,9 @@
 //Llamado a bases de datos e instanciando Contenedores----------------------------------------------
+import config from './src/config'
 
-const { productsOption } = require('./options/mariaDB');
-const { messagesOption } = require('./options/sqlite');
-
-const Container = require('./containers/Container');
-const productos = new Container(productsOption, 'productos');
-const mensajes = new Container(messagesOption, 'mensajes');
+const ContainerSQL = require('./src/containers/containerSQL');
+const productos = new ContainerSQL(config.mariadb, 'productos');
+const mensajes = new ContainerSQL(config.sqlite3, 'mensajes');
 
 //--------------------------------------------------------------------------------------------------
 

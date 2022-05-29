@@ -1,6 +1,6 @@
 const knex = require('knex');
 
-class Container{
+class ContainerSQL {
     constructor(config, table){
         this.knex = knex(config);
         this.table = table;
@@ -28,4 +28,4 @@ class Container{
 
 }
 
-export default Container;
+export default ContainerSQL;
