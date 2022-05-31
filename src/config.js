@@ -27,6 +27,10 @@ export default {
             serverSelectionTimeoutMS: 5000,
         }
     },
+    mongoRemote:{
+        client: 'mongodb',
+        cnxStr: "mongodb+srv://andy:<password>@cluster0.unzti.mongodb.net/?retryWrites=true&w=majority"
+    },
     firebase: {
     "type": "service_account",
     "project_id": "backend-coder-7a384",

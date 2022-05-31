@@ -1,8 +1,10 @@
 //Llamado a bases de datos e instanciando Contenedores----------------------------------------------
-import config from './src/config'
-import {createFakeProduct, createNFakeProducts} from "./src/mocks/products";
+import { config } from './src/config'
+import { createNFakeProducts } from "./src/mocks/products";
 import ContainerFilesystem from "./src/containers/containerFilesystem";
 import { normalize, schema } from "normalizr";
+import MongoStore from "connect-mongo";
+import session from "express-session";
 
 const ContainerSQL = require('./src/containers/containerSQL');
 const productos = new ContainerSQL(config.mariadb, 'productos');
@@ -52,8 +54,10 @@ app.use(express.urlencoded({extended: true}))
 //Rutas Plantillas----------------------------------------------------------------------------------
 app.get('/productos', (req, res) => {
     const products = productos.getAll();
+    const name = req.session.name;
     res.render('main', {
         product: products,
+        name: name, // variable de sesion
         prodAmount: products.length
     });
 })
@@ -116,7 +120,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) =>{
     const product = req.body;
     const id = req.params.id;
-    const prod = productos.modify(parseInt(id), product);
+    const prod = productos.update(parseInt(id), product);
     res.json(prod);
 })
 
@@ -147,3 +151,36 @@ test.get('/', (req, res) => {
 })
 
 app.use('/api/productos-test', test)
+
+//Login---------------------------------------------------------------------------------------------------------
+app.use(session({
+    store: MongoStore.create({mongoUrl: config.mongoRemote.cnxStr}),
+    secret: 'jojojojo',
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: 60000
+    }
+}))
+
+const authWeb = Router();
+
+authWeb.get('/login', (req, res) => {
+    const name = req.session.name;
+    if (name) {
+        res.redirect('/productos');
+    } else {
+        res.render('/login');
+    }
+});
+
+authWeb.get('logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
+});
+
+authWeb.post('/login', (req, res) => {
+    req.session.name = req.body.username;
+    res.redirect('/productos');
+});
